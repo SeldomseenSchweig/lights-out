@@ -42,11 +42,12 @@ function Board({ nrows, ncols }) {
       for (let j = 0; j < nrows; j++) {
         // initialBoard[i][j] = <Cell isLit={trueFalseTable[randValue()]}/>
         row.push(<Cell isLit={trueFalseTable[randValue()]}/>)
-
       }
       initialBoard[i].push(<tr>{row}</tr>)
       
+      
     }
+    
 
   
     return initialBoard;
@@ -55,9 +56,11 @@ function Board({ nrows, ncols }) {
   function hasWon() {
     // TODO: check the board in state to determine whether the player has won.
 
-    for (let i = 0; i <nrows; i++) {
-      for (let j = 0; j < ncols; j++) {
+    for (let i = 0; i <ncols; i++) {
+      
+      for (let j = 0; j < nrows; j++) {
          if ( board[i][j] === 'true'){
+
            return false
          }
       }
@@ -66,10 +69,11 @@ function Board({ nrows, ncols }) {
 
   }
 
-  function flipCellsAround(coord) {
+  function flipCellsAroundMe(coord) {
+    
     setBoard(oldBoard => {
       const [y, x] = coord.split("-").map(Number);
-      const boardCopy = [...oldBoard];
+      
 
       const flipCell = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
@@ -79,6 +83,8 @@ function Board({ nrows, ncols }) {
         }
         
       };
+      ////////// My work starts here taking the old board
+      const boardCopy = [...oldBoard]
 
       flipCell(y,x, boardCopy);
       flipCell(y+1,x, boardCopy);
@@ -87,7 +93,7 @@ function Board({ nrows, ncols }) {
       flipCell(y,x-1, boardCopy);
       return boardCopy;
 
-    ////////// My work starts here taking the old board
+    
     
           // TODO: Make a (deep) copy of the oldBoard
 
@@ -100,6 +106,18 @@ function Board({ nrows, ncols }) {
   // if the game is won, just show a winning msg & render nothing else
 
   // TODO
+  // if (hasWon()){
+  //   return (
+  //     <table>
+  //     <tbody>
+  //     {board}
+  //     </tbody>
+  //   </table>
+
+  //   )
+    
+
+  // }
 
   return (
     <table>

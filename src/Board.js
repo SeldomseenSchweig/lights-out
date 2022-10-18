@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Cell from "./Cell";
 import "./Board.css";
+
 /** Game board of Lights out.
  *
  * Properties:
@@ -26,23 +27,25 @@ import "./Board.css";
  *
  **/
 
-function Board({ nrows, ncols, chanceLightStartsOn }) {
-  const [board, setBoard] = useState(createBoard());
-  console.log("hello")
-
+function Board({ nrows, ncols }) {
+  const [board, setBoard] = useState(createBoard(nrows,ncols));
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
-  function createBoard() {
+  function createBoard(nrows , ncols) {
     let initialBoard = [];
     // TODO: create array-of-arrays of true/false values
-    const randValue = () => Math.floor(Math.random() + 1)- 1
+    const randValue = () => Math.floor(Math.random() * 2)
     const trueFalseTable = [true,false]
-    for (let i = 0; i < nrows; i++) {
-      for (let j = 0; j < ncols; j++) {
-         initialBoard[i][j] = <Cell  isLit={trueFalseTable[randValue]}/> ;
-         
+   
+    for (let i = 0; i < ncols; i++) {
+      initialBoard[i]= []
+      let row = []
+      for (let j = 0; j < nrows; j++) {
+        // initialBoard[i][j] = <Cell isLit={trueFalseTable[randValue()]}/>
+        row.push(<Cell isLit={trueFalseTable[randValue()]}/>)
 
-        
       }
+      initialBoard[i].push(<tr>{row}</tr>)
+      
     }
 
   
@@ -57,8 +60,6 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
          if ( board[i][j] === 'true'){
            return false
          }
-
-        
       }
     }
     return true
@@ -68,6 +69,7 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   function flipCellsAround(coord) {
     setBoard(oldBoard => {
       const [y, x] = coord.split("-").map(Number);
+      const boardCopy = [...oldBoard];
 
       const flipCell = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
@@ -75,23 +77,23 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
         if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
           boardCopy[y][x] = !boardCopy[y][x];
         }
+        
       };
 
-      
+      flipCell(y,x, boardCopy);
+      flipCell(y+1,x, boardCopy);
+      flipCell(y-1,x, boardCopy);
+      flipCell(y,x+1, boardCopy);
+      flipCell(y,x-1, boardCopy);
+      return boardCopy;
 
+    ////////// My work starts here taking the old board
+    
+          // TODO: Make a (deep) copy of the oldBoard
 
-
-
-      ////////// My work starts here taking the old board, flip cells around the ce
-   
-
-      // TODO: Make a (deep) copy of the oldBoard
-
-      // TODO: in the copy, flip this cell and the cells around it
-
-      // TODO: return the copy
-
-
+          // TODO: in the copy, flip this cell and the cells around it
+    
+          // TODO: return the copy
     });
   }
 
@@ -99,9 +101,13 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
 
   // TODO
 
-  // make table board
-
-  // TODO
+  return (
+    <table>
+      <tbody>
+      {board}
+      </tbody>
+    </table>
+  )
 }
 
 export default Board;

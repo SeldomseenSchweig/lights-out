@@ -8,10 +8,10 @@ function App() {
   return (
     
     <div className="App">
-        <h1>Hello</h1>
-
+      <h1>Hello</h1>
       
-      {/* <Board nrows={10} ncols={10} chanceLightStartsOn={.5}/> */}
+      
+      <Board nrows={10} ncols={10} chanceLightStartsOn={.5}/>
     </div>
   );
 }

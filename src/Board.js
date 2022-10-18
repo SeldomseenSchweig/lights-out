@@ -41,9 +41,9 @@ function Board({ nrows, ncols }) {
       let row = []
       for (let j = 0; j < nrows; j++) {
         // initialBoard[i][j] = <Cell isLit={trueFalseTable[randValue()]}/>
-        row.push(<Cell isLit={trueFalseTable[randValue()]}/>)
+        row.push(<Cell key={`${i} ${j}`} flipCellsAroundMe={flipCellsAroundMe} isLit={trueFalseTable[randValue()]}/>)
       }
-      initialBoard[i].push(<tr>{row}</tr>)
+      initialBoard[i].push(<tr> {row}</tr>)
       
       
     }
@@ -53,26 +53,27 @@ function Board({ nrows, ncols }) {
     return initialBoard;
   }
 
-  function hasWon() {
-    // TODO: check the board in state to determine whether the player has won.
+  // function hasWon() {
+  //   // TODO: check the board in state to determine whether the player has won.
 
-    for (let i = 0; i <ncols; i++) {
+  //   for (let i = 0; i <ncols; i++) {
       
-      for (let j = 0; j < nrows; j++) {
-         if ( board[i][j] === 'true'){
+  //     for (let j = 0; j < nrows; j++) {
+  //        if ( board[i][j]){
 
-           return false
-         }
-      }
-    }
-    return true
+  //          return false
+  //        }
+  //     }
+  //   }
+  //   return true
 
-  }
+  // }
 
-  function flipCellsAroundMe(coord) {
+  function flipCellsAround(coord) {
     
     setBoard(oldBoard => {
       const [y, x] = coord.split("-").map(Number);
+      
       
 
       const flipCell = (y, x, boardCopy) => {
@@ -86,11 +87,13 @@ function Board({ nrows, ncols }) {
       ////////// My work starts here taking the old board
       const boardCopy = [...oldBoard]
 
+
       flipCell(y,x, boardCopy);
       flipCell(y+1,x, boardCopy);
       flipCell(y-1,x, boardCopy);
       flipCell(y,x+1, boardCopy);
       flipCell(y,x-1, boardCopy);
+
       return boardCopy;
 
     
@@ -101,6 +104,10 @@ function Board({ nrows, ncols }) {
     
           // TODO: return the copy
     });
+  }
+
+  function flipCellsAroundMe({event,key}) {
+    console.log(key)
   }
 
   // if the game is won, just show a winning msg & render nothing else

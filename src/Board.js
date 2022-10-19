@@ -38,12 +38,12 @@ function Board({ nrows, ncols }) {
    
     for (let i = 0; i < ncols; i++) {
       initialBoard[i]= []
-      let row = []
       for (let j = 0; j < nrows; j++) {
-        // initialBoard[i][j] = <Cell isLit={trueFalseTable[randValue()]}/>
-        row.push(<Cell key={`${i} ${j}`} flipCellsAroundMe={flipCellsAroundMe} isLit={trueFalseTable[randValue()]}/>)
+        initialBoard[i][j] = trueFalseTable[randValue()]
+         
+
       }
-      initialBoard[i].push(<tr> {row}</tr>)
+      
       
       
     }
@@ -53,27 +53,25 @@ function Board({ nrows, ncols }) {
     return initialBoard;
   }
 
-  // function hasWon() {
-  //   // TODO: check the board in state to determine whether the player has won.
+  function hasWon() {
 
-  //   for (let i = 0; i <ncols; i++) {
+    for (let i = 0; i <ncols; i++) {
       
-  //     for (let j = 0; j < nrows; j++) {
-  //        if ( board[i][j]){
+      for (let j = 0; j < nrows; j++) {
+         if ( board[i][j]){
+           return false
+         }
+      }
+    }
+    return true
 
-  //          return false
-  //        }
-  //     }
-  //   }
-  //   return true
-
-  // }
+  }
 
   function flipCellsAround(coord) {
     
+    
     setBoard(oldBoard => {
       const [y, x] = coord.split("-").map(Number);
-      
       
 
       const flipCell = (y, x, boardCopy) => {
@@ -86,7 +84,6 @@ function Board({ nrows, ncols }) {
       };
       ////////// My work starts here taking the old board
       const boardCopy = [...oldBoard]
-
 
       flipCell(y,x, boardCopy);
       flipCell(y+1,x, boardCopy);
@@ -105,34 +102,41 @@ function Board({ nrows, ncols }) {
           // TODO: return the copy
     });
   }
-
-  function flipCellsAroundMe({event,key}) {
-    console.log(key)
-  }
-
   // if the game is won, just show a winning msg & render nothing else
-
   // TODO
-  // if (hasWon()){
-  //   return (
-  //     <table>
-  //     <tbody>
-  //     {board}
-  //     </tbody>
-  //   </table>
+if (hasWon()){
+    return (
+      <div>
+        You WIN
+      </div>
 
-  //   )
+    )
     
 
-  // }
+   }
+  let tblBoard = [];
+
+  for (let y = 0; y < nrows; y++) {
+    let row = [];
+    for (let x = 0; x < ncols; x++) {
+      let coord = `${y}-${x}`;
+      row.push(
+        <Cell
+          key={coord}
+          isLit={board[y][x]}
+          flipCellsAroundMe={() => flipCellsAround(coord)}
+        />
+      );
+    }
+    tblBoard.push(<tr key={y}>{row}</tr>);
+  }
 
   return (
-    <table>
-      <tbody>
-      {board}
-      </tbody>
+    <table className="Board">
+      <tbody>{tblBoard}</tbody>
     </table>
-  )
+  );
 }
 
 export default Board;
+
